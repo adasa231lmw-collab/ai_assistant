@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef3ef">
+  <title>Stony | Local companion</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/vendor/github-dark.min.css">
+  <script src="/vendor/purify.min.js" defer></script>
+  <script src="/vendor/marked.umd.js" defer></script>
+  <script src="/vendor/highlight.min.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Conversations">
+      <a class="brand" href="/" aria-label="Stony home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span><strong>stony</strong><small>LOCAL COMPANION</small></span>
+      </a>
+      <button class="new-chat" id="new-chat"><span aria-hidden="true">+</span> New conversation</button>
+      <div class="side-label"><span>YOUR THREADS</span><button class="icon-button small" id="refresh-chats" title="Refresh conversations" aria-label="Refresh conversations"><span aria-hidden="true">↻</span></button></div>
+      <nav class="chat-list" id="chat-list" aria-label="Recent conversations"></nav>
+      <div class="sidebar-foot">
+        <div class="privacy-mark"><span class="privacy-dot"></span><span>Private by default</span></div>
+        <p>Chats and memories stay on this PC.</p>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menu-button" title="Open conversations" aria-label="Open conversations"><span aria-hidden="true">☰</span></button>
+        <div class="breadcrumb"><span>STONY</span><span class="crumb-slash">/</span><span id="current-title">A little room to think</span></div>
+        <div class="top-actions">
+          <label class="model-control" for="model-select"><span>MODEL</span><select id="model-select" aria-label="Local model"></select></label>
+          <label class="context-control" for="context-select"><span>CONTEXT</span><select id="context-select" aria-label="Context length"><option value="4096" selected>4K</option><option value="8192">8K</option><option value="12288">12K</option><option value="16384">16K</option></select></label>
+          <button class="icon-button theme-button" id="theme-toggle" type="button" title="Switch to dark theme" aria-label="Switch to dark theme"><span aria-hidden="true">◐</span></button>
+          <button class="icon-button inspector-button" id="inspector-button" title="Open memory and awareness" aria-label="Open memory and awareness"><span aria-hidden="true">◫</span></button>
+        </div>
+      </header>
+
+      <section class="conversation" id="conversation" aria-live="polite" aria-label="Chat messages">
+        <div class="welcome" id="welcome">
+          <div class="welcome-eyebrow"><span class="live-dot"></span> PRESENT, AND READY WHEN YOU ARE</div>
+          <h1>Good to see you.<br><em>Where shall we begin?</em></h1>
+          <p class="welcome-copy">A private space to untangle a thought, make a plan, or just talk something through.</p>
+          <div class="prompt-grid" aria-label="Start with a prompt">
+            <button class="prompt-card" data-prompt="Help me plan the next hour. Ask what matters most today if you need to."><span class="prompt-index">01</span><span>Plan the next hour</span><span class="prompt-arrow" aria-hidden="true">↗</span></button>
+            <button class="prompt-card" data-prompt="I have something on my mind. Help me think it through, and point out anything I may be missing."><span class="prompt-index">02</span><span>Think it through</span><span class="prompt-arrow" aria-hidden="true">↗</span></button>
+            <button class="prompt-card" data-prompt="Give me a concise check-in: help me choose one useful priority and a small first step."><span class="prompt-index">03</span><span>Choose a priority</span><span class="prompt-arrow" aria-hidden="true">↗</span></button>
+          </div>
+          <p class="welcome-note">Your words stay here. Stony only sees this conversation and the small set of PC facts shown at right.</p>
+        </div>
+        <div class="message-list" id="message-list"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <form class="composer" id="composer-form">
+          <label class="sr-only" for="message-input">Message Stony</label>
+          <textarea id="message-input" rows="1" maxlength="20000" placeholder="Write what’s on your mind…" required></textarea>
+          <div class="composer-bottom">
+            <div class="composer-hints"><span class="keyboard-hint"><kbd>Enter</kbd> to send</span><span class="hint-divider"></span><span>Saved locally</span></div>
+            <label class="rationale-toggle" title="Ask for a concise explanation, not private internal reasoning"><input id="rationale-toggle" type="checkbox" checked><span>Brief rationale</span></label>
+            <button class="send-button" id="send-button" type="submit"><span>Send</span><span class="send-icon" aria-hidden="true">↑</span></button>
+          </div>
+        </form>
+        <div class="bottomline"><span>STONY RUNS ON THIS PC</span><span>NO ACCOUNT · NO CLOUD CHAT</span></div>
+      </footer>
+    </main>
+
+    <aside class="inspector" id="inspector" aria-label="Memory and awareness">
+      <section class="inspector-section presence-section">
+        <div class="section-heading"><div><span class="eyebrow">RIGHT NOW</span><h2>On this PC</h2></div><button class="icon-button small" id="refresh-awareness" title="Refresh PC status" aria-label="Refresh PC status"><span aria-hidden="true">↻</span></button></div>
+        <p class="local-clock" id="local-clock">Getting local time…</p>
+        <div class="signal-list">
+          <div class="signal-row"><span class="signal-icon signal-green" aria-hidden="true">▥</span><span><small>MEMORY IN USE</small><strong id="memory-state">Checking…</strong></span></div>
+          <div class="signal-row"><span class="signal-icon signal-coral" aria-hidden="true">◷</span><span><small>UPTIME</small><strong id="uptime-state">Checking…</strong></span></div>
+          <div class="signal-row"><span class="signal-icon signal-blue" aria-hidden="true">⌘</span><span><small>COMPUTE</small><strong id="compute-state">Checking…</strong></span></div>
+          <div class="signal-row"><span class="signal-icon signal-green" aria-hidden="true">◉</span><span><small>LOCAL MODEL</small><strong id="model-state">Checking Ollama…</strong></span></div>
+        </div>
+        <div class="process-panel">
+          <div class="process-heading"><span>RUNNING APPS · NAMES ONLY</span><button class="icon-button small" id="refresh-processes" title="Scan local process names" aria-label="Scan local process names"><span aria-hidden="true">↻</span></button></div>
+          <label class="process-toggle"><input id="include-processes" type="checkbox" disabled><span>Share this list in my next message</span></label>
+          <div class="process-list" id="process-list"><p class="empty-note">Not checked. Nothing is scanned until you tap ↻.</p></div>
+        </div>
+        <p class="scope-note">Names only when requested. No screen, files, or window contents.</p>
+      </section>
+
+      <section class="inspector-section news-section">
+        <div class="section-heading"><div><span class="eyebrow">OPTIONAL · ONLINE</span><h2>Headlines</h2></div><button class="icon-button small" id="fetch-news" title="Fetch headlines from NPR" aria-label="Fetch headlines from NPR"><span aria-hidden="true">↗</span></button></div>
+        <p class="news-caption">Only connects when you tap ↗. NPR RSS.</p>
+        <label class="news-toggle"><input id="include-news" type="checkbox"><span>Include fetched headlines in chat</span></label>
+        <div class="news-list" id="news-list"><p class="empty-note">Nothing fetched. Stony stays offline until you ask for news.</p></div>
+      </section>
+
+      <section class="inspector-section memories-section">
+        <div class="section-heading"><div><span class="eyebrow">YOUR NOTES · <span id="memory-count">0</span></span><h2>Long-term memory</h2></div><span class="memory-glyph" aria-hidden="true">✳</span></div>
+        <div class="memory-mode"><span>SHORT TERM</span><strong>Recent messages in this conversation</strong></div>
+        <label class="auto-memory-toggle"><input id="auto-memory-toggle" type="checkbox" checked><span>Automatically remember stable details</span></label>
+        <p class="memory-caption">Preferences and ongoing goals can be saved automatically. Say “remember this” or “forget that”; review or remove anything below.</p>
+        <form class="memory-form" id="memory-form"><label class="sr-only" for="memory-input">Add a saved memory</label><input id="memory-input" maxlength="2000" placeholder="Add a detail to remember…" required><button type="submit" title="Save memory" aria-label="Save memory">+</button></form>
+        <div class="memory-list" id="memory-list"></div>
+      </section>
+      <div class="inspector-foot"><span class="privacy-dot"></span> Stored in <code>stony_data</code> on this PC</div>
+    </aside>
+  </div>
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

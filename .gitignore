@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+node_modules/
+stony_data/
+.venv/
+venv/
+.env
+.claude/
